@@ -23,7 +23,7 @@ def fig1c(Fmax, extent):
 	Fmax[Fmax>8.5] = np.nan
 	cmap = matplotlib.cm.hot
 	cmap.set_bad('lightgray',1.0)
-	plt.figure()
+	# plt.figure()
 	plt.imshow(Fmax, aspect='auto', cmap=cmap, origin='lower', vmin = 0, vmax=8.5,extent=extent)
 	plt.colorbar()
 	plt.ylabel('Local I to E coupling')
