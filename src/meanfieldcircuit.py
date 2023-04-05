@@ -1,4 +1,5 @@
 # import NEST & NEST rasterplot
+import os
 import nest
 import nest.raster_plot
 import sys
@@ -6,10 +7,11 @@ import scipy.io
 import matplotlib.pyplot as plt
 import numpy             as np
 
-#########################################################################################
+########################################################################################
 # Reading connectivity data
-#########################################################################################
-data = np.load('interareal/markov2014.npy', allow_pickle=True).item()
+########################################################################################
+data = np.load(os.path.expanduser('~/storage1/projects/IPP_WANG/src/interareal/markov2014.npy'),
+               allow_pickle=True).item()
 
 # Graph parameters
 Nareas     = 29             # Number of areas
@@ -36,9 +38,9 @@ def simulate(simtime = 1000.0, dt = 0.2, params=None, max_cond = True, seed = 0)
         'rng_seed' : seed
     })
 
-    nest.SetDefaults('threshold_lin_rate_ipn',  {'theta': 0.0, 
+    nest.SetDefaults('threshold_lin_rate_ipn',  {'theta': 0.0,
                                                  'alpha': 1e6,
-                                                 'mu': 0.0, 
+                                                 'mu': 0.0,
                                                  'lambda': 1.0,
                                                  'sigma': 0.0,
                                                  'rectify_output': max_cond,

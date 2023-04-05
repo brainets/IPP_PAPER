@@ -65,7 +65,7 @@ def fig3b_d(tidx, r_w, max_freq_w, r_s, max_freq_s):
 
 	from matplotlib.ticker import FormatStrFormatter
 
-	plt.figure(figsize=(12,6))
+	# plt.figure(figsize=(12,6))
 	use = np.unique(np.array(i_list)*sub_areas)
 	size  = len(use)
 	scale = [i*size for i in range(size)]
@@ -106,8 +106,8 @@ def fig3b_d(tidx, r_w, max_freq_w, r_s, max_freq_s):
 	#plt.yticks(scale, area_plot)
 	plt.tight_layout()
 	#plt.show()
-	plt.savefig('figures/fig3_b_d.pdf', dpi = 600)	
-	plt.close()
+	# plt.savefig('figures/fig3_b_d.pdf', dpi = 600)	
+	# plt.close()
 
 	ax = plt.figure(figsize=(6,3))
 	plt.semilogy(range(Nareas), max_freq_w-10, marker='o', c='g', label='Weak GBA')
@@ -179,7 +179,7 @@ def plot_raster(times_ex, index_ex, reg, simtime, filename, save=False):
 def fig5_6(t1, i1, t2, i2, mr1, mr2, reg, simtime, filename):
 
 
-	plt.figure(figsize=(6,8))
+	# plt.figure(figsize=(6,8))
 	plt.subplot2grid((6,2), (0,0), rowspan=4)
 	plot_raster(t1, i1, reg, simtime, filename)
 	plt.subplot2grid((6,2), (0,1), rowspan=4)
