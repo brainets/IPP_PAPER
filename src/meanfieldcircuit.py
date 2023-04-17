@@ -2,6 +2,7 @@
 import os
 import nest
 import nest.raster_plot
+import xarray as xr
 import sys
 import scipy.io
 import matplotlib.pyplot as plt
@@ -23,8 +24,18 @@ flnMat = data['FLN']
 M      = (flnMat > 0).astype(int) # Binarized
 # Hierarchy values
 h = np.squeeze(data['Hierarchy'].T)
+area_names = ['V1','V2','V4','DP','MT','8m','5','8l','TEO','2','F1','STPc',
+              '7A','46d','10','9/46v','9/46d','F5','TEpd','PBr','7m','7B',
+              'F2','STPi','PROm','F7','8B','STPr','24c']
 
-def simulate(simtime = 1000.0, dt = 0.2, params=None, max_cond = True, seed = 0):
+def simulate(simtime = 1000.0, dt = 0.2, params=None, max_cond = True,
+             sigma=0., seed = 0, tON=[2000.], tOFF=[2250.], s_pos=0,
+             fixation=True):
+
+
+    tON = np.asarray(tON)
+    tOFF = np.asarray(tOFF)
+
     #########################################################################################
     # Configure NEST kernel and parameters
     #########################################################################################
@@ -42,7 +53,7 @@ def simulate(simtime = 1000.0, dt = 0.2, params=None, max_cond = True, seed = 0)
                                                  'alpha': 1e6,
                                                  'mu': 0.0,
                                                  'lambda': 1.0,
-                                                 'sigma': 0.0,
+                                                 'sigma': sigma,
                                                  'rectify_output': max_cond,
                                                  'linear_summation': True})
 
@@ -126,7 +137,7 @@ def simulate(simtime = 1000.0, dt = 0.2, params=None, max_cond = True, seed = 0)
     nest.SetStatus(Iext_e, {'rate': 1.0, 'sigma':0.0, 'tau': 10.0, 'mu': 1.0})                                                             
     nest.SetStatus(Iext_i, {'rate': 1.0, 'sigma':0.0, 'tau': 10.0, 'mu': 1.0})                                                             
 
-    conn = {'rule': 'one_to_one'}                        
+    conn = {'rule': 'one_to_one'}                       
 
     for n in range(Nareas):
         syn_e  = {'weight': bgExc[n], 'synapse_model': 'rate_connection_instantaneous'} 
@@ -134,11 +145,14 @@ def simulate(simtime = 1000.0, dt = 0.2, params=None, max_cond = True, seed = 0)
         syn_i  = {'weight': bgInh[n], 'synapse_model': 'rate_connection_instantaneous'} 
         nest.Connect(Iext_i, pop[n][1], conn, syn_i)
 
-    Iext = nest.Create('step_rate_generator')
-    nest.SetStatus(Iext, {'amplitude_times': [2000., 2250.], 'amplitude_values': [params['Iext'] , 0.]}) 
-    conn = {'rule': 'one_to_one'}  
-    syn_e  = {'weight': 1.0, 'delay': 0.1,  'synapse_model': 'rate_connection_delayed'}
-    nest.Connect(Iext, pop[0][0], conn, syn_e)
+    fixation = False:
+        Iext = []
+        conn = {'rule': 'one_to_one'}  
+        syn_e  = {'weight': 1.0, 'delay': 0.1,  'synapse_model': 'rate_connection_delayed'}
+        for ton, toff in zip(tON, tOFF):
+            Iext += [nest.Create('step_rate_generator')]
+            nest.SetStatus(Iext[-1], {'amplitude_times': [ton, toff], 'amplitude_values': [params['Iext'] , 0.]})
+            nest.Connect(Iext[-1], pop[0][s_pos], conn, syn_e)
 
     #########################################################################################
     # Creating local populations connections
@@ -197,4 +211,9 @@ def simulate(simtime = 1000.0, dt = 0.2, params=None, max_cond = True, seed = 0)
             max_freq[count] = r[i,idx].max()
             count += 1
 
-    return tidx, r, max_freq
+    # Convert to data array
+    r = xr.DataArray(r[::2, :], dims=("roi", "times"),
+                     coords=(area_names, tidx))
+    r.attrs["max_freq"] = max_freq
+
+    return r
