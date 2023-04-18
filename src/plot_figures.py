@@ -38,90 +38,55 @@ def fig1c(Fmax, extent):
 	# plt.close()
 
 def fig3b_d(tidx, r_w, max_freq_w, r_s, max_freq_s):
+    area_plot  = ['V1', 'V4', '8m', '8l', 'TEO', '7A', '9/46d', 'TEpd', '24c']
+    use = range(len(area_plot)) 
+    count = 0
+    count2 = 0
+    for i in use:
+        ax = plt.subplot(len(use),2,count+1)
+        plt.plot(tidx,r_w[i]-10., 'g')
+        min_x = 0 - 0.1*np.max(r_w[i]-10.)
+        max_x = np.max(r_w[i]-10.)+0.1*np.max(r_w[i]-10.)
+        # plt.ylim([min_x, max_x])
+        plt.yticks([min_x,max_x],[None, np.round(max_x,3)])
+        #ax.yaxis.set_major_formatter(FormatStrFormatter('%.3f'))
+        ax.spines['right'].set_visible(False)
+        ax.spines['top'].set_visible(False)
+        ax.spines['bottom'].set_visible(False)
+        if count+1 == 1: plt.title('Weak GBA'); plt.plot([2000., 2250.], [max_x+5, max_x+5], 'k', lw='3'); plt.text(2000, max_x+12, '250 ms')
+        plt.xticks([])
+        plt.xlim([1750, 5000])
+        count+=1
+        ax = plt.subplot(len(use),2,count+1)
+        plt.plot(tidx,r_w[i]-10., 'g')
+        plt.plot(tidx,r_s[i]-10., 'm')
+        min_x = 0 - 0.1*np.max(r_s[i]-10.)
+        max_x = np.max(r_s[i]-10.)+0.1*np.max(r_s[i]-10.)
+        plt.ylim([min_x, max_x])
+        plt.yticks([min_x,max_x],[None, np.round(max_x,3)])
+        ax.spines['right'].set_visible(False)
+        ax.spines['top'].set_visible(False)
+        ax.spines['bottom'].set_visible(False)
+        ax.yaxis.set_label_position("right")
+        plt.ylabel(area_plot[count2], rotation=0)
+        plt.xlim([1750, 5000])
+        if count+1 == 2:  plt.title('Strong GBA'); plt.plot([2000., 2250.], [max_x+5, max_x+5], 'k', lw='3'); plt.text(2000, max_x+12, '250 ms')
+        plt.xticks([])
+        count+=1
+        count2+=1
+    plt.tight_layout()
+    ax = plt.figure(figsize=(6,3))
+    plt.semilogy(range(Nareas), max_freq_w-10, marker='o', c='g', label='Weak GBA')
+    plt.semilogy(range(Nareas), max_freq_s-10, marker='o', c='m', label='Strong GBA')
+    plt.legend()
+    plt.xlim([-0.5,30])
+    #plt.ylim([1e-4, 1.5e2])
+    plt.xticks(range(Nareas), area_names, rotation=90)
+    plt.ylabel('Maximum firing rate [Hz]')
+    plt.xlabel('Areas')
+    plt.tight_layout()
+ 
 
-	area_plot  = ['V1', 'V4', '8m', '8l', 'TEO', '7A', '9/46d', 'TEpd', '24c']
-	area_indx  = [0, 2, 5, 7, 8, 12, 16, 18, 28]
-	sub_areas  = np.zeros(29)
-	for idx in area_indx:
-		sub_areas[idx] = 1
-	sub_areas = sub_areas.astype(int)
-	sub_areas = sub_areas.astype(bool)
-
-	Npop       = 2
-	Npop_total = Npop * Nareas
-
-	#########################################################################################
-	# Plotting rates
-	#########################################################################################
-
-	i_list = []
-	count=0
-	size  = Nareas
-	scale = [i*size for i in range(size)]
-	for i in range(Npop_total):
-		if i%Npop == 0:
-			i_list.append(i)
-			count+=1
-
-	from matplotlib.ticker import FormatStrFormatter
-
-	# plt.figure(figsize=(12,6))
-	use = np.unique(np.array(i_list)*sub_areas)
-	size  = len(use)
-	scale = [i*size for i in range(size)]
-	count = 0
-	count2 = 0
-	for i in use:
-		ax = plt.subplot(len(use),2,count+1)
-		plt.plot(tidx,r_w[i]-10., 'g')
-		min_x = 0 - 0.1*np.max(r_w[i]-10.)
-		max_x = np.max(r_w[i]-10.)+0.1*np.max(r_w[i]-10.)
-		plt.ylim([min_x, max_x])
-		plt.yticks([min_x,max_x],[None, np.round(max_x,3)])
-		#ax.yaxis.set_major_formatter(FormatStrFormatter('%.3f'))
-		ax.spines['right'].set_visible(False)
-		ax.spines['top'].set_visible(False)
-		ax.spines['bottom'].set_visible(False)
-		if count+1 == 1: plt.title('Weak GBA'); plt.plot([2000., 2250.], [max_x+5, max_x+5], 'k', lw='3'); plt.text(2000, max_x+12, '250 ms')
-		plt.xticks([])
-		plt.xlim([1750, 5000])
-		count+=1
-		ax = plt.subplot(len(use),2,count+1)
-		plt.plot(tidx,r_w[i]-10., 'g')
-		plt.plot(tidx,r_s[i]-10., 'm')
-		min_x = 0 - 0.1*np.max(r_s[i]-10.)
-		max_x = np.max(r_s[i]-10.)+0.1*np.max(r_s[i]-10.)
-		plt.ylim([min_x, max_x])
-		plt.yticks([min_x,max_x],[None, np.round(max_x,3)])
-		ax.spines['right'].set_visible(False)
-		ax.spines['top'].set_visible(False)
-		ax.spines['bottom'].set_visible(False)
-		ax.yaxis.set_label_position("right")
-		plt.ylabel(area_plot[count2], rotation=0)
-		plt.xlim([1750, 5000])
-		if count+1 == 2:  plt.title('Strong GBA'); plt.plot([2000., 2250.], [max_x+5, max_x+5], 'k', lw='3'); plt.text(2000, max_x+12, '250 ms')
-		plt.xticks([])
-		count+=1
-		count2+=1
-	#plt.yticks(scale, area_plot)
-	plt.tight_layout()
-	#plt.show()
-	# plt.savefig('figures/fig3_b_d.pdf', dpi = 600)	
-	# plt.close()
-
-	ax = plt.figure(figsize=(6,3))
-	plt.semilogy(range(Nareas), max_freq_w-10, marker='o', c='g', label='Weak GBA')
-	plt.semilogy(range(Nareas), max_freq_s-10, marker='o', c='m', label='Strong GBA')
-	plt.legend()
-	plt.xlim([-0.5,30])
-	#plt.ylim([1e-4, 1.5e2])
-	plt.xticks(range(Nareas), area_names, rotation=90)
-	plt.ylabel('Maximum firing rate [Hz]')
-	plt.xlabel('Areas')
-	plt.tight_layout()
-	#plt.show()
-	# plt.savefig('figures/fig3_joglekar_e.pdf', dpi = 600)	
-	# plt.close()
 
 def fig3_f(muee_vec, max_r_24c_t, max_r_24c_f):
 	c = ['b', 'k']

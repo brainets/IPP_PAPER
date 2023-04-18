@@ -21,9 +21,9 @@ def simulate(lnt = 1, simtime = 600.0, dt = 0.2, transient = 0, tau = 20.0,
         'local_num_threads': lnt,  # Use two threads to build & simulate the network
         'rng_seed' : lnt
     })
-    nest.SetDefaults('threshold_lin_rate_ipn',  {'theta': 0.0, 
+    nest.SetDefaults('threshold_lin_rate_ipn',  {'theta': 0.0,
                                                  'alpha': 1e10,
-                                                 'mu': 0.0,
+                                                 'mu': 0.,
                                                  'lambda': 1.0,
                                                  'sigma': 0.0,
                                                  'linear_summation': True})
@@ -51,10 +51,11 @@ def simulate(lnt = 1, simtime = 600.0, dt = 0.2, transient = 0, tau = 20.0,
     nest.SetStatus(multi, {"record_from":["rate"], 'interval':dt})
     nest.Connect(multi, E)
 
+
     ##########################################################################
     # Connecting populations
     ##########################################################################
-    conn   = {'rule': 'one_to_one'}                       
+    conn   = {'rule': 'one_to_one'}                      
     # E->E
     syn  = {'weight': Wee, 'synapse_model': 'rate_connection_instantaneous'}
     nest.Connect(E, E, conn, syn)
