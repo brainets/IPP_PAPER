@@ -36,9 +36,9 @@ def simulate(simtime = 1000.0, dt = 0.2, params=None, max_cond = True,
     tON = np.asarray(tON)
     tOFF = np.asarray(tOFF)
 
-    #########################################################################################
+    ##########################################################################
     # Configure NEST kernel and parameters
-    #########################################################################################
+    ##########################################################################
     lnt  = 1
 
     nest.ResetKernel()
@@ -57,9 +57,9 @@ def simulate(simtime = 1000.0, dt = 0.2, params=None, max_cond = True,
                                                  'rectify_output': max_cond,
                                                  'linear_summation': True})
 
-    #########################################################################################
+    ##########################################################################
     # Computing connectivity parameters parameters
-    #########################################################################################
+    ##########################################################################
     tau_ex = params['tau_ex']
     tau_in = params['tau_in']
 
@@ -134,7 +134,7 @@ def simulate(simtime = 1000.0, dt = 0.2, params=None, max_cond = True,
     Iext_e = nest.Create('threshold_lin_rate_ipn', 1) # Excitatory external input
     Iext_i = nest.Create('threshold_lin_rate_ipn', 1) # Inhibitory external input
 
-    nest.SetStatus(Iext_e, {'rate': 1.0, 'sigma':0.0, 'tau': 10.0, 'mu': 1.0})                                                             
+    nest.SetStatus(Iext_e, {'rate': 1.0, 'sigma':0.0, 'tau': 10.0, 'mu': 1.0})                                                            
     nest.SetStatus(Iext_i, {'rate': 1.0, 'sigma':0.0, 'tau': 10.0, 'mu': 1.0})                                                             
 
     conn = {'rule': 'one_to_one'}                       
@@ -145,7 +145,7 @@ def simulate(simtime = 1000.0, dt = 0.2, params=None, max_cond = True,
         syn_i  = {'weight': bgInh[n], 'synapse_model': 'rate_connection_instantaneous'} 
         nest.Connect(Iext_i, pop[n][1], conn, syn_i)
 
-    fixation = False:
+    if not fixation:
         Iext = []
         conn = {'rule': 'one_to_one'}  
         syn_e  = {'weight': 1.0, 'delay': 0.1,  'synapse_model': 'rate_connection_delayed'}

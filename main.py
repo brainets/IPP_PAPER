@@ -26,8 +26,9 @@ assert protocol in [0]
 
 if protocol == 0:
 
+
     def simulate_trials(gba="strong-gba", ntrials=100, simtime=1000., dt=.1,
-                        sigma=.1, onsets=[], offsets=[], n_jobs=1,
+                        sigma=.1, onsets=[], offsets=[], n_jobs=1, fixation=False,
                         verbose=False):
             
         params = setParams.get_params_rate_model(gba=gba)
@@ -35,7 +36,7 @@ if protocol == 0:
         
         def _trial(t):
             r_s = meanfield.simulate(simtime = simtime, dt = dt, tON=onsets,
-                                     tOFF=offsets, params=params,
+                                     tOFF=offsets, params=params, fixation=fixation,
                                      max_cond = True, seed = t + 1,
                                      sigma=sigma)
             
@@ -67,13 +68,13 @@ if protocol == 0:
                                 sigma=.1, onsets=[1000., 2500.], offsets=[1200., 2700.],
                             n_jobs=20, fixation=False, verbose=False)
 
+    trials = np.array([0] * 1000 + [1] * 1000)
+
     rates_w = xr.concat([rates_w_f, rates_w_t], "trials")
     rates_s = xr.concat([rates_s_f, rates_s_t], "trials")
 
     rates = xr.concat([rates_w, rates_s], "gba")
     rates = rates.assign_coords({"gba": ["weak", "strong"]})
+    rates = rates.assign_coords({"trials": trials})
 
     rates.to_netcdf(f"data/protocol{protocol}.nc")
-    
-
-
