@@ -22,6 +22,8 @@ Npop_total = Npop * Nareas # Number of total populations
 #M      = (flnMat > 0).astype(int) # Binarized
 flnMat = data['FLN']
 M      = (flnMat > 0).astype(int) # Binarized
+delayMat = data['Distances'] / 3.5
+print(delayMat.max())
 # Hierarchy values
 h = np.squeeze(data['Hierarchy'].T)
 area_names = ['V1','V2','V4','DP','MT','8m','5','8l','TEO','2','F1','STPc',
@@ -30,7 +32,7 @@ area_names = ['V1','V2','V4','DP','MT','8m','5','8l','TEO','2','F1','STPc',
 
 def simulate(simtime = 1000.0, dt = 0.2, params=None, max_cond = True,
              sigma=0., seed = 0, tON=[2000.], tOFF=[2250.], s_pos=0,
-             fixation=True):
+             fixation=True, lr_delays=False):
 
 
     tON = np.asarray(tON)
@@ -179,9 +181,16 @@ def simulate(simtime = 1000.0, dt = 0.2, params=None, max_cond = True,
     
     pos, pre = np.where(M == 1)
     for i,j in zip(pre,pos):
-        syn_ee = {'weight': lr_ee[j,i], 'synapse_model': 'rate_connection_instantaneous'}
-        syn_ie = {'weight': lr_ie[j,i], 'synapse_model': 'rate_connection_instantaneous'}
-        # Long range E->E
+        if not lr_delays:
+            syn_ee = {'weight': lr_ee[j,i], 'synapse_model': 'rate_connection_instantaneous'}
+            syn_ie = {'weight': lr_ie[j,i], 'synapse_model': 'rate_connection_instantaneous'}
+        else:
+            d_e = nest.random.normal(mean=delayMat[j,i], std=delayMat[j,i]*0.1)
+            d_i = nest.random.normal(mean=delayMat[j,i], std=delayMat[j,i]*0.1)
+            syn_ee = {'weight': lr_ee[j,i], 'delay': d_e,
+                      'synapse_model': 'rate_connection_delayed'}
+            syn_ie = {'weight': lr_ie[j,i], 'delay': d_i,
+                      'synapse_model': 'rate_connection_delayed'}
         nest.Connect(pop[i][0], pop[j][0], conn, syn_ee)
         # Long range E->I
         nest.Connect(pop[i][0], pop[j][1], conn, syn_ie)

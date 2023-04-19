@@ -38,7 +38,7 @@ if protocol == 0:
             r_s = meanfield.simulate(simtime = simtime, dt = dt, tON=onsets,
                                      tOFF=offsets, params=params, fixation=fixation,
                                      max_cond = True, seed = t + 1,
-                                     sigma=sigma)
+                                     sigma=sigma, lr_delays=True)
             
             return r_s
         
@@ -52,21 +52,27 @@ if protocol == 0:
         
         return rates
 
-    rates_w_f = simulate_trials(gba="weak-gba", ntrials=1000, simtime=5000., dt=.1,
-                                sigma=.1, onsets=[1000., 2500.], offsets=[1200., 2700.],
-                                n_jobs=20, fixation=True, verbose=False)
 
-    rates_w_t = simulate_trials(gba="weak-gba", ntrials=1000, simtime=5000., dt=.1,
-                                sigma=.1, onsets=[1000., 2500.], offsets=[1200., 2700.],
-                                n_jobs=20, fixation=False, verbose=False)
+    simtime = 7000.
+    onsets = [1000., 3500.]
+    offsets = [1500., 3800.]
+    sigma = 1.
 
-    rates_s_f = simulate_trials(gba="strong-gba", ntrials=1000, simtime=5000., dt=.1,
-                                sigma=.1, onsets=[1000., 2500.], offsets=[1200., 2700.],
-                            n_jobs=20, fixation=True, verbose=False)
+    rates_w_f = simulate_trials(gba="weak-gba", ntrials=1000, simtime=simtime, dt=.1,
+                                sigma=sigma, onsets=onsets, offsets=offsets,
+                                n_jobs=30, fixation=True, verbose=False)
 
-    rates_s_t = simulate_trials(gba="strong-gba", ntrials=1000, simtime=5000., dt=.1,
-                                sigma=.1, onsets=[1000., 2500.], offsets=[1200., 2700.],
-                            n_jobs=20, fixation=False, verbose=False)
+    rates_w_t = simulate_trials(gba="weak-gba", ntrials=1000, simtime=simtime, dt=.1,
+                                sigma=sigma, onsets=onsets, offsets=offsets,
+                                n_jobs=30, fixation=False, verbose=False)
+
+    rates_s_f = simulate_trials(gba="strong-gba", ntrials=1000, simtime=simtime, dt=.1,
+                                sigma=sigma, onsets=onsets, offsets=offsets,
+                            n_jobs=30, fixation=True, verbose=False)
+
+    rates_s_t = simulate_trials(gba="strong-gba", ntrials=1000, simtime=simtime, dt=.1,
+                                sigma=sigma, onsets=onsets, offsets=offsets,
+                            n_jobs=30, fixation=False, verbose=False)
 
     trials = np.array([0] * 1000 + [1] * 1000)
 
