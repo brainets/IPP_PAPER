@@ -22,12 +22,12 @@ def get_params_rate_model(gba='weak-gba'):
     # External inputs to excitatory and inhibitory populations
     params['I']       = {'exc': 10.0, 'inh': 35.0} # in Hz
     # Input to V1
-    params['Iext']    = 20.#22.05*1.9
+    params['Iext']    = 22.05*1.9
 
     if gba == 'strong-gba':
         params['weights']['wei']  = 25.2
         params['weights']['muee'] = 51.5
-        params['Iext']            = 5.#11.54*1.9
+        params['Iext']            = 11.54*1.9
 
     return params
 

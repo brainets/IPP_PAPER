@@ -34,10 +34,8 @@ def simulate(simtime = 1000.0, dt = 0.2, params=None, max_cond = True,
              sigma=0., seed = 0, tON=[2000.], tOFF=[2250.], s_pos=0,
              fixation=True, lr_delays=False):
 
-
     tON = np.asarray(tON)
     tOFF = np.asarray(tOFF)
-
     ##########################################################################
     # Configure NEST kernel and parameters
     ##########################################################################
