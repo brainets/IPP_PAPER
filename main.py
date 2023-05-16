@@ -57,6 +57,10 @@ elif protocol == 1:
     simtime = 4000.
     onsets = [1500.]
     offsets = [2000.]
+elif protocol == 2:
+    simtime = 7000.
+    onsets = [4500.]
+    offsets = [5000.]
 sigma = 1.
 
 rates_w_f = simulate_trials(gba="weak-gba", ntrials=1000, simtime=simtime, dt=.1,
