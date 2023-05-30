@@ -4,6 +4,8 @@ This is a reference implementation of the following paper:
 
 Voges N., et. al. (2023) Decomposing neural circuit function into information processing primitives. JOURNAL
 
+*preprint:*[https://www.biorxiv.org/content/10.1101/2022.08.04.502783v1.abstract](https://www.biorxiv.org/content/10.1101/2022.08.04.502783v1.abstract)
+
 ## Platform information and requirements
 
 **Platform:** Ubuntu 22.04.2 LTS
