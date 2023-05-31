@@ -145,6 +145,12 @@ cd src_C
 and compile the code you want to execute. For compiling the code for all three models do:
 
 ```
+make2
+```
+
+or a specific one (for instance the one ring configuration) by typing:
+
+```
 make oneRing_model
 ```
 
