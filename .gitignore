@@ -1,2 +1,7 @@
 *.nc
 .ipynb_checkpoints/
+__pycache__/
+*.png
+*.pdf
+*.eps
+*.svg
