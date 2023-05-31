@@ -1,4 +1,5 @@
 *.nc
+*.npy
 .ipynb_checkpoints/
 __pycache__/
 *.png

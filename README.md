@@ -120,3 +120,39 @@ python main.py 2
 
 but this code can be memory consuming, and you might want to get a ''bigger'' computer before doing that!
 
+## Standalone C/C++ implementation
+
+#### Copyright 2019 Johannes Hausmann, Nicole Voges (drjoe@free.fr, nicole.voges@gmx.com)
+
+The implementation of the analysis focused on the ring model was originally provided as
+a standalone C/C++ that we also make available at the **src_C** repository.
+
+Inside this directory you will enconteur the following source codes:
+
+- nmring.h/.cpp: 	main model, integration, and stimulus-related code.
+- util.h/.cpp:       	utility macros and file system, averaging, PNG and numpy array writing methods.
+- threadpool.h/.cpp:   	thread pool to run the model in a MT environment.
+- oneRing_model.cpp:	main driver program for a single ring.
+- fb2rings_model.cpp:	main driver program for two rings with feed-forward and -backward couplings.
+- ff3rings_model.cpp	main driver program for three rings with feed-forward coupling. 
+
+To use this version of the implementation first chang to the src_C directory:
+
+``` 
+cd src_C
+``` 
+
+and compile the code you want to execute. For compiling the code for all three models do:
+
+```
+make oneRing_model
+```
+
+Clean compiled code by typing :
+
+```
+make clean 
+```
+
+To test functionality, comment in the lines at the beginning of each main function marked with
+"// minitest of functionality" (and comment out the lines marked with "// the real thing:") and compile.
