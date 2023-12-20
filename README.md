@@ -2,7 +2,7 @@
 
 This is a reference implementation of the following paper:
 
-Voges N., et. al. (2023) Decomposing neural circuit function into information processing primitives. JOURNAL
+Voges N., et. al. (2023) Decomposing neural circuit function into information processing primitives. Journal of Neuroscience
 
 **paper:** [https://www.jneurosci.org/content/early/2023/11/13/JNEUROSCI.0157-23.2023](https://www.jneurosci.org/content/early/2023/11/13/JNEUROSCI.0157-23.2023)
 
